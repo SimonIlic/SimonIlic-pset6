@@ -13,8 +13,42 @@
     tools:context="mprog.simon.urlshortnr.ShortenURLActivity"
     tools:showIn="@layout/activity_shorten_url">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:id="@+id/shortenETLinearLayout">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            android:text=""
+            android:hint="URL to shorten"
+            android:ems="10"
+            android:layout_centerVertical="true"
+            android:id="@+id/urlEditText"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Shrtn"
+            android:layout_toEndOf="@id/urlEditText"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text="TextView"
+        android:layout_below="@id/shortenETLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:visibility="invisible"
+        android:textSize="24sp"
+        android:textAlignment="center" />
+
 </RelativeLayout>
