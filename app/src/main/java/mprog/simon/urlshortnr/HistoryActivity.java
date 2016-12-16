@@ -26,9 +26,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -132,6 +134,15 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
+        // only inflate context menu if clicked item is not the header
+        TextView idTV = (TextView) v.findViewById(R.id.idListTV);
+
+        Toast.makeText(mActivity, idTV.getText().toString(), Toast.LENGTH_SHORT).show();
+        if (idTV.getText().toString().contentEquals("goo.gl/")) {
+            super.onCreateContextMenu(menu, v, menuInfo);
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.context_menu, menu);
+        }
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
@@ -140,22 +151,47 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
         switch (item.getItemId()) {
             case R.id.action_copy_short_url:
-                copyUrl(info.id, info.targetView, false);
+                copyUrl(info.targetView, false);
                 return true;
             case R.id.action_copy_long_url:
-                copyUrl(info.id, info.targetView, true);
+                copyUrl(info.targetView, true);
                 return true;
             case R.id.action_delete:
-                //deleteTask(info.id);
+                deleteUrl(info.targetView);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
-    private void copyUrl(long id, View targetView, boolean targetIsLongUrl) {
+    private void deleteUrl(View targetView) {
+        // get url id
+        TextView idTV = (TextView) targetView.findViewById(R.id.idListTV);
+        String id = idTV.getText().toString();
+
+        // delete url from database
+        mDatabase.child("users").child(mUserId).child("links")
+                .child(id)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChildren()) {
+                            DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
+                            firstChild.getRef().removeValue();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
+    private void copyUrl(View targetView, boolean targetIsLongUrl) {
         if (targetIsLongUrl) {
             TextView longUrlTV = (TextView) targetView.findViewById(R.id.longUrlListTV);
             copyUrlToClipboard(longUrlTV, false);
