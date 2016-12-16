@@ -21,12 +21,12 @@ import java.util.ArrayList;
  * loosely based on this tutorial:
  * http://www.vogella.com/tutorials/AndroidListView/article.html#listsactivity_layout
  **/
-public class HistoryListArrayAdapter extends ArrayAdapter<JSONObject> {
+class HistoryListArrayAdapter extends ArrayAdapter<JSONObject> {
     private final Context context;
     private final ArrayList<JSONObject> data;
     private final int layout;
 
-    public HistoryListArrayAdapter(Context context, ArrayList<JSONObject> data, int layout) {
+    HistoryListArrayAdapter(Context context, ArrayList<JSONObject> data, int layout) {
         super(context, -1, data);
         this.data = data;
         this.context = context;

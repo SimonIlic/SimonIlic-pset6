@@ -19,4 +19,10 @@
     <string name="delete">Delete</string>
     <string name="sign_out">Sign out</string>
     <string name="sign_in_message">Sign in to use goo.gl tracker</string>
+    <string name="link_tracker">Link Tracker</string>
+    <string name="https_goo_gl_example">https://goo.gl/EXAMPLE</string>
+    <string name="look_up">Look Up</string>
+    <string name="welcome">welcome</string>
+    <string name="shorten_button_text">Shrtn</string>
+    <string name="url_to_shorten">URL to shorten</string>
 </resources>

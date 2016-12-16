@@ -24,16 +24,13 @@
             android:layout_height="wrap_content"
             android:inputType="textUri"
             android:text=""
-            android:hint="URL to shorten"
+            android:hint="@string/url_to_shorten"
             android:ems="10"
-            android:layout_centerVertical="true"
             android:id="@+id/urlEditText"
             android:layout_weight="1" />
 
         <Button
-            android:text="Shrtn"
-            android:layout_toEndOf="@id/urlEditText"
-            android:layout_centerVertical="true"
+            android:text="@string/shorten_button_text"
             android:onClick="shortenUrl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +40,6 @@
     </LinearLayout>
 
     <TextView
-        android:text="TextView"
         android:layout_below="@id/shortenETLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +50,7 @@
         android:textAlignment="center" />
 
     <TextView
-        android:text="welcome"
+        android:text="@string/welcome"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"

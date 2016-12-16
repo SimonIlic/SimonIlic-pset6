@@ -24,15 +24,13 @@
             android:layout_height="wrap_content"
             android:inputType="textUri"
             android:text=""
-            android:hint="https://goo.gl/EXAMPLE"
+            android:hint="@string/https_goo_gl_example"
             android:ems="10"
-            android:layout_centerVertical="true"
             android:id="@+id/shortUrlEditText"
             android:layout_weight="1" />
 
         <Button
-            android:text="Look Up"
-            android:layout_centerVertical="true"
+            android:text="@string/look_up"
             android:onClick="lookupUrl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -14,7 +14,7 @@
     tools:showIn="@layout/activity_history">
 
     <TextView
-        android:text="Link Tracker"
+        android:text="@string/link_tracker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
