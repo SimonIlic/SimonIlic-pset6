@@ -30,6 +30,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
  * Allowing users to sign in with their google account.
  *
  * Used google's tutorial: https://developers.google.com/identity/sign-in/android/sign-in
+ *
+ * Created by Simon Ilic
 **/
 public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {

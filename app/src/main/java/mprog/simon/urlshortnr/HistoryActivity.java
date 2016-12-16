@@ -34,10 +34,12 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+/** History activity.
+ * Allowing users to view their URL shorten history and link clicks
+ *
+ * Created by Simon Ilic
+ **/
 public class HistoryActivity extends AppCompatActivity implements LookupURLAsyncTask.AsyncResponse {
-    // init firebase variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
     private String mUserId;
 
@@ -61,8 +63,8 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
         mResponse = this;
 
         // Initialize Firebase Auth and Database Reference
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         new LookupURLAsyncTask(this, this);
@@ -79,6 +81,7 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
 
     }
 
+    /** Creates the History list using HistoryListArrayAdapter**/
     private void createList() {
         // Set up ListView
         //empty arraylist to pass to adapter
@@ -130,6 +133,7 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
         });
     }
 
+    /** context menu for long clicks **/
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
@@ -138,6 +142,7 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
         inflater.inflate(R.menu.context_menu, menu);
     }
 
+    /** handle context menu logic **/
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -162,6 +167,7 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
         }
     }
 
+    /** delete a url from users database **/
     private void deleteUrl(View targetView) {
         // get url id
         TextView idTV = (TextView) targetView.findViewById(R.id.idListTV);
@@ -186,7 +192,9 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
                 });
     }
 
+    /** copy a url from the listview to the users clipboard **/
     private void copyUrl(View targetView, boolean targetIsLongUrl) {
+        // get the long or short url from the corresponding textview
         if (targetIsLongUrl) {
             TextView longUrlTV = (TextView) targetView.findViewById(R.id.longUrlListTV);
             copyUrlToClipboard(longUrlTV, false);
@@ -217,14 +225,11 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
     /** A helper function that copies a text from a view to the phones clipboard **/
     public void copyUrlToClipboard(View view, boolean isShortUrlView) {
         TextView urlTextView = (TextView) view;
-        // return if no url was looked up
-        if (urlTextView.getVisibility() == View.INVISIBLE) {
-            return;
-        }
 
         // get url from text view
         String url = urlTextView.getText().toString();
 
+        // if the url is a short url add the goo.gl domain to the textview text
         if (isShortUrlView) {
             url = "https://goo.gl/" + url;
         }

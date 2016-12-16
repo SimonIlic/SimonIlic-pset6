@@ -7,12 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +27,11 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/** The apps Main Activity
+ * Allowing users to shorten urls usings googles url shortener
+ *
+ * Created by Simon Ilic
+ **/
 public class ShortenURLActivity extends AppCompatActivity implements ShortenURLAsyncTask.AsyncResponse {
 
     // init firebase variables

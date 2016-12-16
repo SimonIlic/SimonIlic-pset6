@@ -9,33 +9,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
  * An AsyncTask Class to fetch a shortened URL from the goo.gl API
  *
  * Created by: Simon Ilic
- */
+ **/
+class ShortenURLAsyncTask extends AsyncTask<String, Void, String> {
 
-public class ShortenURLAsyncTask extends AsyncTask<String, Void, String> {
-
-    public AsyncResponse delegate = null;
+    private AsyncResponse delegate = null;
     private Activity mActivity;
 
-    public ShortenURLAsyncTask(Activity activity, AsyncResponse delegate){
+    ShortenURLAsyncTask(Activity activity, AsyncResponse delegate){
         mActivity = activity;
         this.delegate = delegate;
     }
 
     // Interface to relay data back to ShortenURLActivity
-    public interface AsyncResponse {
+    interface AsyncResponse {
         void processFinish(JSONObject output);
     }
 
@@ -51,7 +48,7 @@ public class ShortenURLAsyncTask extends AsyncTask<String, Void, String> {
         String api_url = "https://www.googleapis.com/urlshortener/v1/url?" +
                 "key=AIzaSyDy0G2e5RPk0FwiZ8d4KBEpe8bggh3G3Uk";
 
-        URL url = null;
+        URL url;
         try {
             // create url
             url = new URL(api_url);
@@ -119,7 +116,7 @@ public class ShortenURLAsyncTask extends AsyncTask<String, Void, String> {
 
         // JSON-ify the result string
         // and delegate to ShortenURLActivity
-        JSONObject resultJSON = null;
+        JSONObject resultJSON;
         try {
             resultJSON = new JSONObject(result);
             delegate.processFinish(resultJSON);

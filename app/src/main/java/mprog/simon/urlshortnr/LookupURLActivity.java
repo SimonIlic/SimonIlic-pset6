@@ -20,6 +20,11 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/** Lookup URL activity.
+ * Allowing users to look up a shortened goo.gl url.
+ *
+ * Created Simon Ilic
+ **/
 public class LookupURLActivity extends AppCompatActivity implements LookupURLAsyncTask.AsyncResponse{
 
     @Override
@@ -32,6 +37,7 @@ public class LookupURLActivity extends AppCompatActivity implements LookupURLAsy
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    /** copies url from textview to clipboard **/
     public void copyUrlToClipboard(View view) {
         TextView urlTextView = (TextView) view;
         // return if no url was looked up
@@ -50,6 +56,7 @@ public class LookupURLActivity extends AppCompatActivity implements LookupURLAsy
         Toast.makeText(this, "Copied URL to clipboard", Toast.LENGTH_SHORT).show();
     }
 
+    /** handle lookup button click **/
     public void lookupUrl(View view) {
         // Hide url display
         TextView urlView = (TextView) findViewById(R.id.longUrlTV);
@@ -70,6 +77,7 @@ public class LookupURLActivity extends AppCompatActivity implements LookupURLAsy
         asyncTask.execute(url);
     }
 
+    /** this overrides the implemented method from LookupURLAsyncResponse **/
     @Override
     public void processFinish(JSONObject output) {
         String longUrl = "";

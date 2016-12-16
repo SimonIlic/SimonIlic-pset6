@@ -10,29 +10,25 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 
 /**
  * An AsyncTask that will lookup a goo.gl url and its analytics
  *
  * Created by Simon on 14-12-2016.
- */
-
-public class LookupURLAsyncTask extends AsyncTask<String, Void, String> {
-    public LookupURLAsyncTask.AsyncResponse delegate = null;
+ **/
+class LookupURLAsyncTask extends AsyncTask<String, Void, String> {
+    private LookupURLAsyncTask.AsyncResponse delegate = null;
     private Activity mActivity;
 
-    public LookupURLAsyncTask(Activity activity, LookupURLAsyncTask.AsyncResponse delegate){
+    LookupURLAsyncTask(Activity activity, LookupURLAsyncTask.AsyncResponse delegate){
         mActivity = activity;
         this.delegate = delegate;
     }
 
     // Interface to relay data back to LookupURLActivity
-    public interface AsyncResponse {
+    interface AsyncResponse {
         void processFinish(JSONObject output);
     }
 
@@ -46,11 +42,8 @@ public class LookupURLAsyncTask extends AsyncTask<String, Void, String> {
         // add goo.gl url to http GET request
         api_url += "&shortUrl=" + args[0];
 
-        URL url = null;
+        URL url;
         try {
-            // create url
-            url = new URL(api_url);
-
             // open connection
             url = new URL(api_url);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
@@ -96,7 +89,7 @@ public class LookupURLAsyncTask extends AsyncTask<String, Void, String> {
 
         // JSON-ify the result string
         // and delegate to LookupURLActivity
-        JSONObject resultJSON = null;
+        JSONObject resultJSON;
         try {
             resultJSON = new JSONObject(result);
             delegate.processFinish(resultJSON);
