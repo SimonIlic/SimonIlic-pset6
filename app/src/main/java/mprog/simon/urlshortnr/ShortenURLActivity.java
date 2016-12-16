@@ -151,6 +151,7 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
         }
     }
 
+    /** handel shortn button click **/
     public void shortenUrl(View view) {
         // hide URL display
         TextView urlView = (TextView) findViewById(R.id.shortUrlTV);
@@ -171,6 +172,7 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
         asyncTask.execute(url);
     }
 
+    /** copies url from textview to clipboard **/
     public void copyUrlToClipboard(View view) {
         TextView urlTextView = (TextView) view;
         // return if no url was looked up
