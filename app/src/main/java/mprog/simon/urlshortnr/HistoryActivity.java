@@ -74,75 +74,65 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
         }
         else {
             mUserId = mFirebaseUser.getUid();
-
-            // Set up ListView
-            //empty arraylist to pass to adapter
-            ArrayList<JSONObject> data = new ArrayList<>();
-
-            // add a header to the data
-            JSONObject header = null;
-            try {
-                header = new JSONObject("{\"id\":\"goo.gl/\",\"longUrl\":\"long url\",\"analytics\":{\"allTime\":{\"shortUrlClicks\":\"clicks\"}}}");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            data.add(header);
-
-            final ListView listView = (ListView) findViewById(R.id.historyList);
-            mAdapter = new HistoryListArrayAdapter(this, data, R.layout.history_list_item);
-            listView.setAdapter(mAdapter);
-
-            // Register ListView for context menu, implicitly defining item longclick listener
-            registerForContextMenu(listView);
-
-            mDatabase.child("users").child(mUserId).child("links").addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    // lookup url analytics and populate list on result
-                    LookupURLAsyncTask asyncTask = new LookupURLAsyncTask(mActivity, mResponse);
-                    asyncTask.execute((String) dataSnapshot.child("id").getValue());
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
             createList();
         }
 
     }
 
     private void createList() {
+        // Set up ListView
+        //empty arraylist to pass to adapter
+        ArrayList<JSONObject> data = new ArrayList<>();
+
+        // add a header to the data
+        JSONObject header = null;
+        try {
+            header = new JSONObject("{\"id\":\"goo.gl/\",\"longUrl\":\"long url\",\"analytics\":{\"allTime\":{\"shortUrlClicks\":\"clicks\"}}}");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        data.add(header);
+
+        final ListView listView = (ListView) findViewById(R.id.historyList);
+        mAdapter = new HistoryListArrayAdapter(this, data, R.layout.history_list_item);
+        listView.setAdapter(mAdapter);
+
+        // Register ListView for context menu, implicitly defining item longclick listener
+        registerForContextMenu(listView);
+
+        mDatabase.child("users").child(mUserId).child("links").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                // lookup url analytics and populate list on result
+                LookupURLAsyncTask asyncTask = new LookupURLAsyncTask(mActivity, mResponse);
+                asyncTask.execute((String) dataSnapshot.child("id").getValue());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                recreate();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
-        // only inflate context menu if clicked item is not the header
-        TextView idTV = (TextView) v.findViewById(R.id.idListTV);
-
-        Toast.makeText(mActivity, idTV.getText().toString(), Toast.LENGTH_SHORT).show();
-        if (idTV.getText().toString().contentEquals("goo.gl/")) {
-            super.onCreateContextMenu(menu, v, menuInfo);
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.context_menu, menu);
-        }
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_menu, menu);
@@ -151,6 +141,11 @@ public class HistoryActivity extends AppCompatActivity implements LookupURLAsync
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        // do not allow for deletion/copying of header
+        if (info.position == 0) {
+            return true;
+        }
 
         switch (item.getItemId()) {
             case R.id.action_copy_short_url:

@@ -6,6 +6,7 @@
     <string name="sign_in_success">Sign in successful</string>
     <string name="signed_out">signed out</string>
     <string name="signed_in_fmt">Signed in as: %s</string>
+    <string name="welcome_user_fmt">Welcome %s</string>
     <string name="title_activity_history">goo.gl tracker</string>
     <string name="action_sign_out">Sign out</string>
     <string name="login_required_message">You need to log in with google to use this feature</string>
@@ -16,4 +17,6 @@
     <string name="copy_short_url">Copy short URL</string>
     <string name="copy_long_url">Copy long URL</string>
     <string name="delete">Delete</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_in_message">Sign in to use goo.gl tracker</string>
 </resources>

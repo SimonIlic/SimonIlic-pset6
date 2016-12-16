@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -56,6 +57,16 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        // Display saved username
+        // get username as String from shared prefs
+        final SharedPreferences sharedPref = getSharedPreferences(
+                "mprog.simon.simonilic_pset6_sharedprefs", MODE_PRIVATE);
+        String username = sharedPref.getString("username", "");
+
+        // set welcome message with saved name
+        TextView welcomeTV = (TextView) findViewById(R.id.welcomeMessage);
+        welcomeTV.setText(getString(R.string.welcome_user_fmt, username));
     }
 
     @Override
@@ -74,9 +85,6 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            case R.id.action_settings:
-                return true;
-
             case R.id.action_search: {
                 // go to look up activity
                 Intent intent = new Intent(this, LookupURLActivity.class);
@@ -84,7 +92,6 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
 
                 return true;
             }
-
             case R.id.action_history: {
                 // go to history/tracker activity
                 Intent intent = new Intent(this, HistoryActivity.class);
@@ -92,8 +99,6 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
 
                 return true;
             }
-
-
             case R.id.action_sign_out: {
                 mFirebaseAuth.signOut();
                 // update mFirebasUser to ensure proper logic
@@ -109,7 +114,7 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
         }
     }
 
-    /** this override the implemented method from AsyncResponse **/
+    /** this override the implemented method from ShortenURLAsyncResponse **/
     @Override
     public void processFinish(JSONObject output){
         // get the shortened URL from the received output JSON

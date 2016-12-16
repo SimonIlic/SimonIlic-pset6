@@ -1,6 +1,7 @@
 package mprog.simon.urlshortnr;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,13 +60,23 @@ public class LoginActivity extends AppCompatActivity implements
         // get firebase auth instance
         mAuth = FirebaseAuth.getInstance();
 
-        // firebase authstatelistener to listen to changed login state (not used atm)
+        // firebase authstatelistener to listen to changed login state
+        // finally updates the UI after successful login
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    updateUI(true);
+
+                    // add username to the shared pref list
+                    SharedPreferences sharedPref = getSharedPreferences(
+                            "mprog.simon.simonilic_pset6_sharedprefs", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("username", user.getDisplayName());
+                    editor.commit();
+
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -88,6 +99,11 @@ public class LoginActivity extends AppCompatActivity implements
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        // if user is already logged in show logged in view
+        if (mAuth.getCurrentUser() != null) {
+            updateUI(true);
+        }
     }
 
     @Override
@@ -140,17 +156,9 @@ public class LoginActivity extends AppCompatActivity implements
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-
             // Google Sign In was successful, authenticate with Firebase
             GoogleSignInAccount account = result.getSignInAccount();
             firebaseAuthWithGoogle(account);
-
-            updateUI(true);
-
-
         } else {
             // Signed out, show unauthenticated UI.
             updateUI(false);
@@ -181,11 +189,25 @@ public class LoginActivity extends AppCompatActivity implements
 
     private void updateUI(boolean signedIn) {
         if (signedIn) {
+            // Signed in successfully, show authenticated UI.
+            mStatusTextView.setText(getString(R.string.signed_in_fmt, mAuth.getCurrentUser().getDisplayName()));
+
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_out_button).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
+            findViewById(R.id.sign_out_button).setVisibility(View.GONE);
+
 
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
         }
+    }
+
+    public void onSignOutButtonClick(View view) {
+        mAuth.signOut();
+
+        Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+
+        updateUI(false);
     }
 }
