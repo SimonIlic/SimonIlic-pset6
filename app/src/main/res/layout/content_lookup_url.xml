@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_shorten_url"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="mprog.simon.urlshortnr.ShortenURLActivity"
+    tools:showIn="@layout/activity_shorten_url">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/shortenETLinearLayout">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textUri"
+            android:text=""
+            android:hint="https://goo.gl/EXAMPLE"
+            android:ems="10"
+            android:layout_centerVertical="true"
+            android:id="@+id/shortUrlEditText"
+            android:layout_weight="1" />
+
+        <Button
+            android:text="Look Up"
+            android:layout_centerVertical="true"
+            android:onClick="lookupUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lookupButton"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <TextView
+        android:text=""
+        android:layout_below="@id/shortenETLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/longUrlTV"
+        android:onClick="copyUrlToClipboard"
+        android:visibility="invisible"
+        android:textSize="24sp"
+        android:textAlignment="center" />
+
+</RelativeLayout>

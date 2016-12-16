@@ -16,6 +16,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +28,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class ShortenURLActivity extends AppCompatActivity implements ShortenURLAsyncTask.AsyncResponse {
+
+    // init firebase variables
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,12 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
                 startActivity(intent);
             }
         });
+
+
+        // Initialize Firebase Auth and Database Reference
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -61,21 +77,42 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
             case R.id.action_settings:
                 return true;
 
-            case R.id.action_search:
+            case R.id.action_search: {
                 // go to look up activity
                 Intent intent = new Intent(this, LookupURLActivity.class);
                 startActivity(intent);
 
                 return true;
+            }
 
-            default:
+            case R.id.action_history: {
+                // go to history/tracker activity
+                Intent intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
+
+                return true;
+            }
+
+
+            case R.id.action_sign_out: {
+                mFirebaseAuth.signOut();
+                // update mFirebasUser to ensure proper logic
+                mFirebaseUser = mFirebaseAuth.getCurrentUser();
+                Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+
+            default: {
                 return super.onOptionsItemSelected(item);
+            }
         }
     }
 
     //this override the implemented method from AsyncResponse
     @Override
     public void processFinish(JSONObject output){
+        // get the shortened URL from the received output JSON
         String shortUrl = null;
         try {
             shortUrl = output.getString("id");
@@ -83,9 +120,26 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
             e.printStackTrace();
         }
 
+        // display shortened URL
         TextView urlView = (TextView) findViewById(R.id.shortUrlTV);
         urlView.setText(shortUrl);
         urlView.setVisibility(View.VISIBLE);
+
+        // if user is logged in write to database
+        if (mFirebaseUser == null) {
+            Toast.makeText(this,
+                    "Log in with google to save this link in your history",
+                    Toast.LENGTH_LONG).show();
+        }
+        else {
+            // get user firebase id
+            String userId = mFirebaseUser.getUid();
+            // get unique id part of goo.gl url
+            String urlId = shortUrl.substring(shortUrl.lastIndexOf("/") + 1);
+
+            // write short url to database
+            mDatabase.child("users").child(userId).child("links").child(urlId).setValue(shortUrl);
+        }
     }
 
     public void shortenUrl(View view) {
