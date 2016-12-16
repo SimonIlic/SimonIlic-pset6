@@ -20,6 +20,8 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * An AsyncTask Class to fetch a shortened URL from the goo.gl API
+ *
+ * Created by: Simon Ilic
  */
 
 public class ShortenURLAsyncTask extends AsyncTask<String, Void, String> {

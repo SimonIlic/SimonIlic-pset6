@@ -109,17 +109,16 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
         }
     }
 
-    //this override the implemented method from AsyncResponse
+    /** this override the implemented method from AsyncResponse **/
     @Override
     public void processFinish(JSONObject output){
         // get the shortened URL from the received output JSON
-        String shortUrl = null;
+        String shortUrl = "";
         try {
             shortUrl = output.getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         // display shortened URL
         TextView urlView = (TextView) findViewById(R.id.shortUrlTV);
         urlView.setText(shortUrl);
@@ -138,12 +137,13 @@ public class ShortenURLActivity extends AppCompatActivity implements ShortenURLA
             String urlId = shortUrl.substring(shortUrl.lastIndexOf("/") + 1);
 
             // write short url to database
-            mDatabase.child("users").child(userId).child("links").child(urlId).setValue(shortUrl);
+            mDatabase.child("users").child(userId).child("links").child(urlId)
+                    .child("id").setValue(shortUrl);
         }
     }
 
     public void shortenUrl(View view) {
-        // Hide url display
+        // hide URL display
         TextView urlView = (TextView) findViewById(R.id.shortUrlTV);
         urlView.setVisibility(View.INVISIBLE);
 

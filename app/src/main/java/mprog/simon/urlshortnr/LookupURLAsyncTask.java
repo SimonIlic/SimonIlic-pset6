@@ -17,6 +17,8 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * An AsyncTask that will lookup a goo.gl url and its analytics
+ *
  * Created by Simon on 14-12-2016.
  */
 
@@ -34,17 +36,12 @@ public class LookupURLAsyncTask extends AsyncTask<String, Void, String> {
         void processFinish(JSONObject output);
     }
 
-    protected void onPreExecute() {
-        Toast.makeText(mActivity.getApplicationContext(),
-                "Looking up URL", Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     protected String doInBackground(String... args) {
 
         // api URL including app specific api key
         String api_url = "https://www.googleapis.com/urlshortener/v1/url?" +
-                "key=AIzaSyDy0G2e5RPk0FwiZ8d4KBEpe8bggh3G3Uk";
+                "key=AIzaSyDy0G2e5RPk0FwiZ8d4KBEpe8bggh3G3Uk&projection=ANALYTICS_CLICKS";
 
         // add goo.gl url to http GET request
         api_url += "&shortUrl=" + args[0];

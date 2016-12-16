@@ -10,4 +10,10 @@
     <string name="action_sign_out">Sign out</string>
     <string name="login_required_message">You need to log in with google to use this feature</string>
     <string name="action_history">History</string>
+    <string name="list_long_url_error">NO LONG URL</string>
+    <string name="list_clicks_error">-1</string>
+    <string name="list_id_error">NO ID</string>
+    <string name="copy_short_url">Copy short URL</string>
+    <string name="copy_long_url">Copy long URL</string>
+    <string name="delete">Delete</string>
 </resources>

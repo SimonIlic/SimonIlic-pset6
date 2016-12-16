@@ -72,11 +72,18 @@ public class LookupURLActivity extends AppCompatActivity implements LookupURLAsy
 
     @Override
     public void processFinish(JSONObject output) {
-        String longUrl = null;
+        String longUrl = "";
+        String status = "";
         try {
+            status = output.getString("status");
             longUrl = output.getString("longUrl");
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+        // notify user if something is wrong with the short url
+        if (!status.contentEquals("OK")) {
+            Toast.makeText(this, "ERROR: " + status, Toast.LENGTH_SHORT).show();
         }
 
         TextView urlView = (TextView) findViewById(R.id.longUrlTV);

@@ -6,33 +6,34 @@
     android:orientation="vertical" >
 
     <TextView
-        android:text="URLDJBV"
+        android:text="@string/list_id_error"
         android:id="@+id/idListTV"
-        android:layout_width="50dp"
+        android:layout_width="58dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_marginEnd="6dp"
         android:padding="3dp" />
 
     <TextView
-        android:text="fissa.com"
-        android:id="@+id/longUrlListTV"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@id/idListTV"
-        android:layout_toRightOf="@id/clicksListTV"
-        android:padding="3dp"
-        android:textSize="17sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:text="9"
+        android:text="@string/list_clicks_error"
         android:textSize="17sp"
         android:padding="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:id="@+id/clicksListTV" />
+
+    <TextView
+        android:text="@string/list_long_url_error"
+        android:id="@+id/longUrlListTV"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/idListTV"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:padding="3dp"
+        android:textSize="17sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
